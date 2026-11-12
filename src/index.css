@@ -1,0 +1,161 @@
+@import '@fontsource-variable/geist';
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Semantic colour tokens — swapped wholesale for dark mode below. */
+:root {
+  --c-bg: #fafafa;
+  --c-surface: #ffffff;
+  --c-subtle: #f4f4f5;
+  --c-muted: #ececee;
+  --c-border: #e7e7ea;
+  --c-border-strong: #d4d4d8;
+  --c-fg: #0a0a0a;
+  --c-fg-muted: #52525b;
+  --c-fg-subtle: #8a8a93;
+  --c-accent: #0a0a0a;
+  --c-accent-fg: #fafafa;
+  --c-ring: #2563eb;
+  --c-danger: #dc2626;
+  --c-warning: #b45309;
+  --c-success: #15803d;
+  --c-checker: #e9e9ec;
+}
+
+.dark {
+  --c-bg: #0a0a0a;
+  --c-surface: #111113;
+  --c-subtle: #18181b;
+  --c-muted: #222226;
+  --c-border: #232327;
+  --c-border-strong: #34343a;
+  --c-fg: #fafafa;
+  --c-fg-muted: #a1a1aa;
+  --c-fg-subtle: #71717a;
+  --c-accent: #fafafa;
+  --c-accent-fg: #0a0a0a;
+  --c-ring: #60a5fa;
+  --c-danger: #f87171;
+  --c-warning: #fbbf24;
+  --c-success: #4ade80;
+  --c-checker: #1d1d21;
+}
+
+@theme inline {
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-subtle: var(--c-subtle);
+  --color-muted: var(--c-muted);
+  --color-border: var(--c-border);
+  --color-border-strong: var(--c-border-strong);
+  --color-fg: var(--c-fg);
+  --color-fg-muted: var(--c-fg-muted);
+  --color-fg-subtle: var(--c-fg-subtle);
+  --color-accent: var(--c-accent);
+  --color-accent-fg: var(--c-accent-fg);
+  --color-ring: var(--c-ring);
+  --color-danger: var(--c-danger);
+  --color-warning: var(--c-warning);
+  --color-success: var(--c-success);
+  --color-checker: var(--c-checker);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--c-ring) 25%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--c-ring);
+    outline-offset: 2px;
+  }
+
+  /* Smooth theme switches without animating every frame of interaction. */
+  body,
+  .theme-transition {
+    transition:
+      background-color 200ms var(--ease-out-soft),
+      border-color 200ms var(--ease-out-soft),
+      color 200ms var(--ease-out-soft);
+  }
+}
+
+@layer components {
+  /* Checkerboard used to visualise transparent backgrounds. */
+  .checkerboard {
+    background-color: var(--c-surface);
+    background-image:
+      linear-gradient(45deg, var(--c-checker) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--c-checker) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--c-checker) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--c-checker) 75%);
+    background-size: 16px 16px;
+    background-position:
+      0 0,
+      0 8px,
+      8px -8px,
+      -8px 0;
+  }
+
+  .qr-canvas svg,
+  .qr-canvas canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 220ms var(--ease-out-soft);
+}
+
+.animate-fade-in {
+  animation: fade-in 180ms var(--ease-out-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
